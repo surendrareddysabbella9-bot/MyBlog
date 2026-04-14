@@ -1,0 +1,55 @@
+{% extends "base/base.html" %}
+
+{% block title %}Edit Profile - My Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-fadeIn">
+    <div class="col-md-8 col-lg-6">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">Edit <span class="text-primary">Profile</span></h1>
+            <p class="text-secondary">Update your bio and profile picture to stand out.</p>
+        </div>
+
+        <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Bio Field -->
+                <div class="mb-4">
+                    <label class="form-label small fw-semibold">About You (Bio)</label>
+                    <textarea name="bio" class="form-control rounded-4 px-3 py-3 bg-light border-0 shadow-none" rows="4" placeholder="Tell us a bit about yourself...">{{ profile.bio }}</textarea>
+                </div>
+
+                <!-- Profile Picture Upload -->
+                <div class="mb-5">
+                    <label class="form-label small fw-semibold d-block">Profile Picture</label>
+                    
+                    <div class="d-flex align-items-center gap-4 p-3 bg-light rounded-4">
+                        <div class="position-relative">
+                            {% if profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" alt="Current" class="rounded-circle shadow-sm" width="80" height="80" style="object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center shadow-sm" style="width: 80px; height: 80px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person text-secondary" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                    </svg>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <input type="file" name="profile_picture" class="form-control form-control-sm border-0 bg-white shadow-sm rounded-pill px-3">
+                            <div class="extra-small text-muted mt-2">Recommended: Square image, 500x500px.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4 flex-grow-1 py-2 shadow-sm">Save Changes</button>
+                    <a href="{% url 'profile' request.user.username %}" class="btn btn-light text-secondary rounded-pill px-4 border-0 py-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

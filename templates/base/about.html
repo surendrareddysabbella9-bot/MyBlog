@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+
+{% block title %}About Us - My Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-fadeIn">
+    <div class="col-lg-8">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">About <span class="text-primary">MyBlog</span></h1>
+            <p class="lead text-secondary">A platform for thinkers, writers, and explorers.</p>
+        </div>
+
+        <div class="card border-0 shadow-lg p-5 rounded-4 mb-5">
+            <p class="fs-5 text-secondary mb-4">Welcome to <strong>MyBlog</strong>, a space where ideas take flight. We
+                believe that stories have the power to change perspectives, and our platform is built to amplify those
+                voices.</p>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <h4 class="fw-bold mb-3">Our Vision</h4>
+                    <p class="text-secondary small">We aim to create a community of passionate writers and readers who
+                        love sharing knowledge and experiences across various domains.</p>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="fw-bold mb-3">The Mission</h4>
+                    <p class="text-secondary small">To provide a high-quality, distraction-free reading and writing
+                        experience that connects curious minds around the world.</p>
+                </div>
+            </div>
+
+            <h4 class="fw-bold mb-3">The Core Team</h4>
+            <div class="d-flex flex-wrap gap-4 mt-3">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="https://ui-avatars.com/api/?name=Surendra+Reddy+Sabbella&background=6366f1&color=fff"
+                        class="rounded-circle" width="32" height="32">
+                    <span class="small fw-semibold">Surendra Reddy Sabbella (Founder)</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <img src="https://ui-avatars.com/api/?name=Surendra+Reddy&background=ec4899&color=fff" class="rounded-circle"
+                        width="32" height="32">
+                    <span class="small fw-semibold">Surendra Reddy (Admin)</span>
+                </div>
+            </div>
+
+            <p class="mt-5 text-center mb-0">
+                <a href="{% url 'contact' %}" class="btn btn-primary rounded-pill px-4 shadow-sm">Get in Touch</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

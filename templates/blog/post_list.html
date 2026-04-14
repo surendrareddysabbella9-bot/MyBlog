@@ -1,0 +1,152 @@
+{% extends "base/base.html" %}
+
+{% block title %}Home - My Blog{% endblock %}
+
+{% block content %}
+<div class="container animate-fadeIn">
+    <!-- Hero Section -->
+    <div class="row justify-content-center mb-5 py-5">
+        <div class="col-lg-10 text-center">
+            <h1 class="display-4 fw-bold mb-3">Discover stories that <span class="text-primary">inspire</span>.</h1>
+            <p class="lead text-secondary mb-5 mx-auto" style="max-width: 700px;">Explore the latest thoughts, tutorials, and insights from our community of writers.</p>
+            
+            <!-- Modern Search Bar -->
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-7">
+                    <form method="GET" action="{% url 'post_list' %}" class="d-flex w-100 shadow-sm p-1 bg-white rounded-pill border">
+                        <input type="text" name="q" value="{{ query }}" placeholder="Search topics, tags, or authors..." class="form-control border-0 bg-transparent ps-4 shadow-none">
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold m-0">Latest Stories</h3>
+        {% if user.is_authenticated %}
+            <a href="{% url 'post_create' %}" class="btn btn-primary rounded-pill px-4 shadow-sm">+ Create Post</a>
+        {% endif %}
+    </div>
+
+    {% if page_obj %}
+        <div class="row g-4">
+            {% for post in page_obj %}
+                <div class="col-md-6">
+                    <div class="card h-100 p-2">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://ui-avatars.com/api/?name={{ post.author.username }}&background=f1f5f9&color=6366f1" class="rounded-circle me-2" width="32" height="32">
+                                <div>
+                                    <a href="{% url 'profile' post.author.username %}" class="text-decoration-none text-dark fw-semibold small">
+                                        {{ post.author.username|cut:"@gmail.com"|capfirst }}
+                                    </a>
+                                    <div class="text-muted extra-small">{{ post.created_at|date:"M d, Y" }}</div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="card-title fw-bold mb-3">
+                                <a href="{% url 'post_detail' post.id %}" class="text-decoration-none text-dark hover-text-primary">
+                                    {{ post.title }}
+                                </a>
+                            </h4>
+                            
+                            <p class="card-text text-secondary mb-4 flex-grow-1">{{ post.content|truncatewords:25 }}</p>
+
+                            <!-- Tags Section -->
+                            {% if post.tags %}
+                            <div class="mb-4 d-flex flex-wrap gap-2">
+                                {% for tag in post.get_tag_list %}
+                                    <a href="{% url 'posts_by_tag' tag %}" class="btn btn-sm btn-light border-0 text-secondary rounded-pill px-3 py-1 small">#{{ tag }}</a>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <!-- Post Like Button -->
+                                    <button class="btn btn-sm {% if user in post.likes.all %}btn-danger{% else %}btn-outline-danger{% endif %} post-like-btn" data-post-id="{{ post.id }}">
+                                        ❤️ <span class="post-like-count">{{ post.total_likes }}</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="d-flex gap-2">
+                                    {% if user == post.author %}
+                                        <a href="{% url 'update_post' post.id %}" class="btn btn-sm btn-light text-primary border-0 rounded-pill px-3">Edit</a>
+                                    {% endif %}
+                                    <a href="{% url 'post_detail' post.id %}" class="btn btn-sm btn-primary rounded-pill px-4">Read</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="mb-3 text-muted">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-journal-x" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.146 6.146a.5.5 0 0 1 .708 0L8 7.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 8l1.147 1.146a.5.5 0 0 1-.708.708L8 8.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 8 6.146 6.854a.5.5 0 0 1 0-.708z"/>
+                    <path d="M1 2.828v9.923c.942-.101 1.705-.255 2.223-.43.518-.175.92-.386 1.201-.637.28-.25.453-.541.576-.879a1.007 1.007 0 0 1 .801-.652c.312-.053.647-.053.959 0a1.007 1.007 0 0 1 .801.652c.123.338.296.629.576.879.281.25.683.462 1.201.637.518.175 1.281.329 2.223.43V2.828c-.942.101-1.705.255-2.223.43-.518.175-.92.386-1.201.637a1.507 1.507 0 0 0-.576.879 1.507 1.507 0 0 0-3.122 0 1.507 1.507 0 0 0-.576-.879c-.281-.25-.683-.462-1.201-.637-.518-.175-1.281-.329-2.223-.43zM0 2.26c-.045.83-.063 1.62-.063 2.373a4.004 4.004 0 0 1 .063 12.013C.115 16.643 0 15.65 0 14.5c0-1.15.115-2.143.237-2.907zM1 1.52c1.026.12 1.78.29 2.19.43.411.14.73.32.902.48.17.16.27.37.33.56.09.28.26.54.51.7.25.16.56.24.87.24s.62-.08.87-.24c.25-.16.42-.42.51-.7.06-.19.16-.4.33-.56.172-.16.491-.34.902-.48.41-.14 1.164-.31 2.19-.43V1h-.063c-.942.101-1.705.255-2.223.43-.518.175-.92.386-1.201.637-.28.25-.453.541-.576.879a1.007 1.007 0 0 1-.801.652 1.007 1.007 0 0 1-.801-.652c-.123-.338-.296-.629-.576-.879-.281-.25-.683-.462-1.201-.637C2.705 1.255 1.942 1.101 1 1h.063z"/>
+                </svg>
+            </div>
+            <p class="lead">No blog posts matches your search.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_create' %}" class="btn btn-primary rounded-pill px-4">Create Your First Post</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}">First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Previous</a></li>
+                {% endif %}
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- JavaScript for Post Like Action -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".post-like-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let postId = this.dataset.postId;
+                let url = `/post/${postId}/like/`;
+
+                fetch(url, { 
+                    method: "POST", 
+                    headers: { 
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    this.querySelector(".post-like-count").textContent = data.total_likes;
+                    if (data.liked) {
+                        this.classList.remove("btn-outline-danger");
+                        this.classList.add("btn-danger");
+                    } else {
+                        this.classList.remove("btn-danger");
+                        this.classList.add("btn-outline-danger");
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

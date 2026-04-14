@@ -1,0 +1,57 @@
+{% extends "base/base.html" %}
+
+{% block title %}Register - My Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center animate-fadeIn" style="min-height: 75vh;">
+    <div class="col-md-6 col-lg-4">
+        <div class="card p-4 border-0 shadow-lg">
+            <div class="text-center mb-4">
+                <div class="d-inline-block p-3 bg-primary bg-opacity-10 rounded-circle mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-plus-fill text-primary" viewBox="0 0 16 16">
+                        <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                    </svg>
+                </div>
+                <h3 class="fw-bold">Create Account</h3>
+                <p class="text-secondary small">Join our community of passionate readers</p>
+            </div>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} border-0 small py-2 px-3 mb-3 text-{{ message.tags }}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label small fw-semibold">Username</label>
+                    <input type="text" id="username" name="username" class="form-control rounded-pill px-3 py-2 bg-light border-0 shadow-none" placeholder="Choose a username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label small fw-semibold">Email</label>
+                    <input type="email" id="email" name="email" class="form-control rounded-pill px-3 py-2 bg-light border-0 shadow-none" placeholder="name@example.com" required>
+                </div>
+                <div class="row g-2 mb-4">
+                    <div class="col-6">
+                        <label for="password1" class="form-label small fw-semibold">Password</label>
+                        <input type="password" id="password1" name="password1" class="form-control rounded-pill px-3 py-2 bg-light border-0 shadow-none" placeholder="••••••••" required>
+                    </div>
+                    <div class="col-6">
+                        <label for="password2" class="form-label small fw-semibold">Confirm</label>
+                        <input type="password" id="password2" name="password2" class="form-control rounded-pill px-3 py-2 bg-light border-0 shadow-none" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow-sm">Get Started</button>
+            </form>
+
+            <div class="text-center mt-4">
+                <p class="small text-secondary mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary text-decoration-none fw-bold">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

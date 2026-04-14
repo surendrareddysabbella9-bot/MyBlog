@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+
+{% block title %}Contact Us - My Blog{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-fadeIn">
+    <div class="col-md-8 col-lg-6">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">Get in <span class="text-primary">Touch</span></h1>
+            <p class="text-secondary">Have any questions or feedback? We'd love to hear from you!</p>
+        </div>
+        
+        <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success border-0 small py-2 px-3 mb-4 shadow-sm" role="alert">
+                        ✨ {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Your Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Your Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-semibold">Your Message</label>
+                    {{ form.message }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 shadow-sm mt-2">Send Message</button>
+            </form>
+        </div>
+
+        <div class="mt-5 text-center">
+            <p class="text-muted small">You can also reach us at <a href="mailto:support@myblog.com" class="text-primary text-decoration-none fw-bold">support@myblog.com</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
