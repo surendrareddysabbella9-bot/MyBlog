@@ -29,6 +29,9 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
 
+# CSRF Settings for Production
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com', 'https://*.render.com']
+
 
 # Application definition
 
@@ -78,20 +81,20 @@ WSGI_APPLICATION = "myblog.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 import dj_database_url
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
 database_url = config('DATABASE_URL', default=None)
+
 if database_url:
-    DATABASES["default"] = dj_database_url.parse(database_url)
+    DATABASES = {
+        'default': dj_database_url.config(default=database_url)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
